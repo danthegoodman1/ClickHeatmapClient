@@ -14,8 +14,8 @@ INSERT INTO rows_to_array  (view_id, interaction_id, event_id) VALUES
 ('1', 'b', 'hover'),
 ('1', 'b', 'click'),
 ('1', 'b', 'leave'),
-('1', 'c', 'hover'),
-('1', 'c', 'click')
+('2', 'c', 'hover'),
+('2', 'c', 'click')
 ;
 
 SELECT * FROM rows_to_array ;
