@@ -176,7 +176,9 @@ export default function App() {
       screenHeight: window.screen.height,
       screenWidth: window.screen.width,
       event: stringifyEvent(event),
-      location: JSON.stringify(window.location)
+      location: JSON.stringify(window.location),
+      viewID: window.viewID,
+      interactionID: window.interactionID
     });
     console.log(event.target);
     console.log(cssPath(event.target));
@@ -184,35 +186,44 @@ export default function App() {
     const sel = cssPathUsingClassAndIndex(event.target)
     console.log(sel);
     console.log(sel?.replace(/(\..+?:)/gm, ':')); // remove classes (now same as cssPath)
-    console.log(window.viewID, window.interactionID)
     // console.log(cssPathUsingClassAndID(event.target));
     // console.log(altSelector(event.target));
   };
   const hoverHandler = (event: MouseEvent) => {
     if (event.target instanceof Element && ["A", "BUTTON"].includes(event.target.tagName)) {
       console.log("hover event", event);
+      window.interactionID = uuidv4()
       console.log({
         windowHeight: window?.innerHeight,
         windowWidth: window?.innerWidth,
         screenHeight: window.screen.height,
         screenWidth: window.screen.width,
         event: stringifyEvent(event),
-        location: JSON.stringify(window.location)
+        location: JSON.stringify(window.location),
+        viewID: window.viewID,
+        interactionID: window.interactionID
       });
-      window.interactionID = uuidv4()
       console.log(event.target);
       console.log(cssPath(event.target));
       const sel = cssPathUsingClassAndIndex(event.target)
       console.log(sel);
       console.log(sel?.replace(/(\..+?:)/gm, ':')); // remove classes (now same as cssPath)
-      console.log(window.viewID, window.interactionID)
       const mouseLeaveHandler: EventListener = (evt: Event) => {
         evt.target?.removeEventListener('mouseleave', mouseLeaveHandler)
         console.log('mouse left')
+        console.log({
+          windowHeight: window?.innerHeight,
+          windowWidth: window?.innerWidth,
+          screenHeight: window.screen.height,
+          screenWidth: window.screen.width,
+          event: stringifyEvent(event),
+          location: JSON.stringify(window.location),
+          viewID: window.viewID,
+          interactionID: window.interactionID
+        });
         const sel = cssPathUsingClassAndIndex(evt.target)
         console.log(sel);
         console.log(sel?.replace(/(\..+?:)/gm, ':')); // remove classes (now same as cssPath)
-        console.log(window.viewID, window.interactionID)
       }
       event.target.addEventListener('mouseleave', mouseLeaveHandler)
     }
