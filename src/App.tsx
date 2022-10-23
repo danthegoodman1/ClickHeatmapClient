@@ -182,9 +182,36 @@ export default function App() {
     // console.log(cssPathUsingClassAndID(event.target));
     // console.log(altSelector(event.target));
   };
+  const hoverHandler = (event: MouseEvent) => {
+    if (event.target instanceof Element && ["A", "BUTTON"].includes(event.target.tagName)) {
+      console.log("hover event", event);
+      console.log({
+        windowHeight: window?.innerHeight,
+        windowWidth: window?.innerWidth,
+        screenHeight: window.screen.height,
+        screenWidth: window.screen.width,
+        event: stringifyEvent(event),
+        location: JSON.stringify(window.location)
+      });
+      console.log(event.target);
+      console.log(cssPath(event.target));
+      const sel = cssPathUsingClassAndIndex(event.target)
+      console.log(sel);
+      console.log(sel?.replace(/(\..+?:)/gm, ':')); // remove classes (now same as cssPath)
+      const mouseLeaveHandler: EventListener = (evt: Event) => {
+        evt.target?.removeEventListener('mouseleave', mouseLeaveHandler)
+        console.log('mouse left')
+      }
+      event.target.addEventListener('mouseleave', mouseLeaveHandler)
+    }
+  };
 
   useEffect(() => {
     window.addEventListener("click", clickHandler);
+    window.addEventListener("mouseover", hoverHandler);
+    window.addEventListener('load', (e) => {
+      console.log('load', e, window.location.pathname)
+    })
     return () => {
       window.removeEventListener("click", clickHandler);
     };
