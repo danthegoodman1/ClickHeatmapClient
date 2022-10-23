@@ -1,4 +1,9 @@
 import { useEffect } from "react";
+import { v4 as uuidv4 } from 'uuid'
+
+declare global {
+  interface Window { viewID: string | undefined; interactionID: string | undefined; }
+}
 
 // manually serialize
 function stringifyEvent(e: any) {
@@ -179,6 +184,7 @@ export default function App() {
     const sel = cssPathUsingClassAndIndex(event.target)
     console.log(sel);
     console.log(sel?.replace(/(\..+?:)/gm, ':')); // remove classes (now same as cssPath)
+    console.log(window.viewID, window.interactionID)
     // console.log(cssPathUsingClassAndID(event.target));
     // console.log(altSelector(event.target));
   };
@@ -193,14 +199,20 @@ export default function App() {
         event: stringifyEvent(event),
         location: JSON.stringify(window.location)
       });
+      window.interactionID = uuidv4()
       console.log(event.target);
       console.log(cssPath(event.target));
       const sel = cssPathUsingClassAndIndex(event.target)
       console.log(sel);
       console.log(sel?.replace(/(\..+?:)/gm, ':')); // remove classes (now same as cssPath)
+      console.log(window.viewID, window.interactionID)
       const mouseLeaveHandler: EventListener = (evt: Event) => {
         evt.target?.removeEventListener('mouseleave', mouseLeaveHandler)
         console.log('mouse left')
+        const sel = cssPathUsingClassAndIndex(evt.target)
+        console.log(sel);
+        console.log(sel?.replace(/(\..+?:)/gm, ':')); // remove classes (now same as cssPath)
+        console.log(window.viewID, window.interactionID)
       }
       event.target.addEventListener('mouseleave', mouseLeaveHandler)
     }
@@ -209,8 +221,10 @@ export default function App() {
   useEffect(() => {
     window.addEventListener("click", clickHandler);
     window.addEventListener("mouseover", hoverHandler);
-    window.addEventListener('load', (e) => {
-      console.log('load', e, window.location.pathname)
+    window.addEventListener('load', async (e) => {
+      const viewID = uuidv4()
+      console.log('load', e, window.location.pathname, viewID);
+      (window as any).viewID = viewID
     })
     return () => {
       window.removeEventListener("click", clickHandler);
