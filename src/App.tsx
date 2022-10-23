@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { v4 as uuidv4 } from 'uuid'
+import uuidv4 from './uuid'
 
 declare global {
   interface Window { viewID: string | undefined; interactionID: string | undefined; }
